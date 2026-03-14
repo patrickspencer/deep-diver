@@ -1,12 +1,15 @@
 {
-  "name": "deep_diver_init",
+  "name": "deep-diver",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "npx tsx src/lib/db/migrate.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.58",

@@ -2,7 +2,24 @@
   "permissions": {
     "allow": [
       "Bash(npx create-next-app@latest:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx drizzle-kit generate:*)",
+      "Bash(npx drizzle-kit push:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx next build:*)",
+      "Bash(grep:*)",
+      "Bash(npx next dev:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(ls:*)",
+      "Bash(sqlite3:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e:*)",
+      "Bash(git -C /Users/patrick/Dropbox/programming/deep_diver remote:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)"
     ]
   }
 }
