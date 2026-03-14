@@ -1,16 +1,16 @@
 # Deep Diver
 
-Financial documents -- 10-Ks, 10-Qs, 8-Ks, earnings transcripts -- are dense, lengthy, and full of cross-references that make them hard to read and even harder to analyze systematically. A single 10-K can run over 200 pages, and comparing disclosures across companies or time periods is tedious manual work.
+Financial documents (10-Ks, 10-Qs, 8-Ks, earnings transcripts) are dense, lengthy, and full of cross-references that make them hard to read and even harder to analyze systematically. A single 10-K can run over 200 pages, and comparing disclosures across companies or time periods is tedious manual work.
 
 Deep Diver is an agent-powered research workbench for understanding company financial documents. It pulls filings directly from SEC EDGAR, renders them in a built-in viewer, and lets you have AI-assisted conversations about the content. Instead of switching between a PDF reader, a spreadsheet, and a chatbot, everything lives in one workspace.
 
 ## Features
 
-- **SEC EDGAR integration** -- Search for companies by ticker or name and download their filings (10-K, 10-Q, 8-K) directly into your workspace
-- **Document viewer** -- Read HTML and PDF filings in-app with dark mode support, adjustable zoom, and section navigation for 10-K filings
-- **AI chat** -- Ask questions about documents with an AI assistant that has context on the filings you're viewing
-- **Research folders** -- Organize documents, notes, and chat threads into research projects
-- **Notes** -- Take notes alongside your documents, linked to specific filings
+- **SEC EDGAR integration**: Search for companies by ticker or name and download their filings (10-K, 10-Q, 8-K) directly into your workspace
+- **Document viewer**: Read HTML and PDF filings in-app with dark mode support, adjustable zoom, and section navigation for 10-K filings
+- **AI chat**: Ask questions about documents with an AI assistant that has context on the filings you're viewing
+- **Research folders**: Organize documents, notes, and chat threads into research projects
+- **Notes**: Take notes alongside your documents, linked to specific filings
 
 ## Tech Stack
 
