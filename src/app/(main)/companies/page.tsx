@@ -46,32 +46,34 @@ export default function CompaniesPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-8">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Building2 className="h-6 w-6" />
-          Companies
-        </h1>
-        <p className="text-muted-foreground">
-          Search SEC EDGAR and manage companies
-        </p>
+    <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="shrink-0 p-8 pb-0 space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Building2 className="h-6 w-6" />
+            Companies
+          </h1>
+          <p className="text-muted-foreground">
+            Search SEC EDGAR and manage companies
+          </p>
+        </div>
+
+        <CompanySearch onCompanyAdded={fetchCompanies} />
       </div>
 
-      <CompanySearch onCompanyAdded={fetchCompanies} />
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div>
-          <h2 className="mb-3 text-lg font-semibold">Saved Companies</h2>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 flex-1 overflow-hidden px-8 pt-6 pb-8">
+        <div className="flex flex-col overflow-hidden">
+          <h2 className="mb-3 text-lg font-semibold shrink-0">Saved Companies</h2>
           {companies.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               No companies saved. Search above to add companies.
             </p>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 overflow-auto flex-1">
               {companies.map((company) => (
                 <Card
                   key={company.id}
-                  className={`cursor-pointer transition-colors ${
+                  className={`cursor-pointer transition-colors shrink-0 ${
                     selectedCompany?.id === company.id
                       ? "border-primary"
                       : "hover:bg-muted/50"
@@ -112,14 +114,14 @@ export default function CompaniesPage() {
           )}
         </div>
 
-        <div>
+        <div className="flex flex-col overflow-hidden">
           {selectedCompany ? (
-            <div>
-              <h2 className="mb-3 text-lg font-semibold">
+            <div className="flex flex-col overflow-hidden flex-1">
+              <h2 className="mb-3 text-lg font-semibold shrink-0">
                 {selectedCompany.ticker || selectedCompany.name} Filings
               </h2>
 
-              <div className="mb-3 flex items-center gap-2 rounded-lg border bg-muted/30 p-2">
+              <div className="mb-3 flex items-center gap-2 rounded-lg border bg-muted/30 p-2 shrink-0">
                 <FolderOpen className="h-4 w-4 text-muted-foreground shrink-0" />
                 <span className="text-sm text-muted-foreground shrink-0">Download to:</span>
                 {folders.length > 0 ? (
@@ -152,7 +154,9 @@ export default function CompaniesPage() {
                 )}
               </div>
 
-              <FilingsList company={selectedCompany} folderId={selectedFolderId} />
+              <div className="overflow-auto flex-1">
+                <FilingsList company={selectedCompany} folderId={selectedFolderId} />
+              </div>
             </div>
           ) : (
             <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">

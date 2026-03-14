@@ -24,7 +24,7 @@ export function FilingsList({ company, folderId }: FilingsListProps) {
       if (!company.cik) return;
       setLoading(true);
       try {
-        const forms = formFilter === "all" ? "" : `&forms=${formFilter}`;
+        const forms = formFilter === "all" ? "&forms=10-K,10-Q,8-K" : `&forms=${formFilter}`;
         const res = await fetch(
           `/api/edgar?action=filings&cik=${company.cik}${forms}`
         );

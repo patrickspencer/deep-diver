@@ -1,12 +1,14 @@
 import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 import { streamText } from "ai";
 import { getModel } from "@/lib/ai/provider";
 import {
   FINANCIAL_ANALYST_PROMPT,
   buildContextPrompt,
 } from "@/lib/ai/prompts";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { chatMessages, documents } from "@/lib/db/schema";
+import { chatMessages, documents, userSettings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { readFileContent } from "@/lib/documents/storage";
 import { extractTextFromHtml, chunkText } from "@/lib/documents/chunker";
@@ -71,7 +73,24 @@ export async function POST(request: NextRequest) {
     })),
   ];
 
-  const model = getModel();
+  // Read user's AI provider settings
+  const cookieStore = await cookies();
+  const user = await getSession(cookieStore);
+  let aiProvider: string | undefined;
+  let aiApiKey: string | undefined;
+  if (user) {
+    const settings = db
+      .select()
+      .from(userSettings)
+      .where(eq(userSettings.userId, user.id))
+      .all();
+    for (const s of settings) {
+      if (s.key === "ai_provider") aiProvider = s.value;
+      if (s.key === "ai_api_key") aiApiKey = s.value;
+    }
+  }
+
+  const model = getModel({ provider: aiProvider, apiKey: aiApiKey });
 
   const result = streamText({
     model,

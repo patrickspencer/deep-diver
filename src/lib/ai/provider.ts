@@ -2,20 +2,24 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
 import type { LanguageModel } from "ai";
 
-export function getModel(): LanguageModel {
-  const provider = process.env.AI_PROVIDER || "anthropic";
+interface ModelOptions {
+  provider?: string;
+  apiKey?: string;
+}
 
-  if (provider === "openai" && process.env.OPENAI_API_KEY) {
-    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
+export function getModel(options?: ModelOptions): LanguageModel {
+  const provider = options?.provider || process.env.AI_PROVIDER || "anthropic";
+  const apiKey = options?.apiKey;
+
+  if (provider === "openai") {
+    const key = apiKey || process.env.OPENAI_API_KEY;
+    if (!key) throw new Error("No OpenAI API key configured.");
+    const openai = createOpenAI({ apiKey: key });
     return openai("gpt-4o");
   }
 
-  if (process.env.ANTHROPIC_API_KEY) {
-    const anthropic = createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    return anthropic("claude-sonnet-4-5-20250929");
-  }
-
-  throw new Error(
-    "No AI provider configured. Set ANTHROPIC_API_KEY or OPENAI_API_KEY in .env.local"
-  );
+  const key = apiKey || process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error("No Anthropic API key configured.");
+  const anthropic = createAnthropic({ apiKey: key });
+  return anthropic("claude-sonnet-4-5-20250929");
 }
