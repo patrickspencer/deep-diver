@@ -141,7 +141,10 @@ export function ChatPanel({
         }),
       });
 
-      if (!res.ok) throw new Error("Chat request failed");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => null);
+        throw new Error(errData?.error || `Chat request failed (${res.status})`);
+      }
 
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
@@ -151,21 +154,14 @@ export function ChatPanel({
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          const chunk = decoder.decode(value);
-          // Parse SSE format
-          const lines = chunk.split("\n");
-          for (const line of lines) {
-            if (line.startsWith("0:")) {
-              try {
-                const text = JSON.parse(line.slice(2));
-                fullContent += text;
-                setStreamingContent(fullContent);
-              } catch {
-                // skip unparseable chunks
-              }
-            }
-          }
+          const chunk = decoder.decode(value, { stream: true });
+          fullContent += chunk;
+          setStreamingContent(fullContent);
         }
+      }
+
+      if (!fullContent.trim()) {
+        throw new Error("No response received. Check your API key and billing in Settings.");
       }
 
       // Add assistant message
@@ -181,6 +177,16 @@ export function ChatPanel({
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Chat error:", error);
+      const errorMessage: ChatMessageType = {
+        id: Date.now() + 1,
+        threadId: threadId!,
+        role: "assistant",
+        content: `**Error:** ${error instanceof Error ? error.message : "Something went wrong."}`,
+        highlightedText: null,
+        documentId: null,
+        createdAt: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setStreaming(false);
       setStreamingContent("");

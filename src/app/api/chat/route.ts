@@ -90,20 +90,28 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const model = getModel({ provider: aiProvider, apiKey: aiApiKey });
+  try {
+    const model = getModel({ provider: aiProvider, apiKey: aiApiKey });
 
-  const result = streamText({
-    model,
-    messages,
-    onFinish: async ({ text }) => {
-      // Save assistant message
-      await db.insert(chatMessages).values({
-        threadId,
-        role: "assistant",
-        content: text,
-      });
-    },
-  });
+    const result = streamText({
+      model,
+      messages,
+      onFinish: async ({ text }) => {
+        // Save assistant message
+        await db.insert(chatMessages).values({
+          threadId,
+          role: "assistant",
+          content: text,
+        });
+      },
+    });
 
-  return result.toTextStreamResponse();
+    return result.toTextStreamResponse();
+  } catch (error) {
+    console.error("Chat API error:", error);
+    return new Response(
+      JSON.stringify({ error: String(error) }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 }
